@@ -1,1 +1,68 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f3f6ff" />
+  <title>VNM Classroom Life Sim</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">🏫</div>
+    <div class="brand-copy"><strong>CLASSROOM LIFE</strong><span>Mô phỏng trường học sống động</span></div>
+    <div class="clock-chip"><span class="live-dot"></span><div><small>GIỜ TRƯỜNG</small><strong id="clock">07:30</strong></div></div>
+  </header>
+
+  <main class="app-shell">
+    <section class="stage-column">
+      <div class="scene-head">
+        <div><span class="eyebrow">GÓC NHÌN TỪ TRÊN CAO</span><h1 id="sceneTitle">Lớp học 5A</h1><p id="sceneSubtitle">Học sinh đang ổn định chỗ ngồi.</p></div>
+        <label class="scene-select-wrap"><span>Khung cảnh</span><select id="sceneMode"><option value="auto">Tự động theo giờ</option><option value="classroom">Lớp học</option><option value="yard">Sân trường</option></select></label>
+      </div>
+      <div class="canvas-wrap"><canvas id="world" aria-label="Mô phỏng lớp học và sân trường"></canvas><div class="canvas-stamp"><span class="live-dot"></span> MÔ PHỎNG ĐANG CHẠY</div><div class="legend"><span><i class="dot student-dot"></i>Học sinh</span><span><i class="dot teacher-dot"></i>Cô giáo</span></div></div>
+      <div class="sim-controls">
+        <button id="playBtn" class="primary-btn">⏸ Tạm dừng</button>
+        <div class="speed-group" aria-label="Tốc độ mô phỏng"><button data-speed="1" class="speed active">1×</button><button data-speed="3" class="speed">3×</button><button data-speed="10" class="speed">10×</button></div>
+        <button id="newDayBtn" class="secondary-btn">↻ Ngày mới</button>
+      </div>
+      <div class="stats-grid">
+        <article class="stat-card"><span class="stat-icon blue">👩‍🎓</span><div><small>HỌC SINH</small><strong id="studentCount">14</strong></div></article>
+        <article class="stat-card"><span class="stat-icon green">📚</span><div><small>HOẠT ĐỘNG</small><strong id="activityStat">Đang học</strong></div></article>
+        <article class="stat-card"><span class="stat-icon amber">🙂</span><div><small>TÂM TRẠNG CHUNG</small><strong id="moodStat">Vui vẻ</strong></div></article>
+      </div>
+      <section class="panel timetable-panel">
+        <div class="panel-heading"><div><span class="eyebrow">LỊCH TRONG NGÀY</span><h2>Thời khóa biểu</h2></div><span class="muted-pill" id="currentPeriod">Tiết học</span></div>
+        <div id="timetable" class="timetable"></div>
+        <div class="add-schedule"><label>Giờ bắt đầu<input id="eventTime" type="time" value="09:00"></label><label>Hoạt động<select id="eventActivity"><option value="Học bài">Học bài</option><option value="Ra chơi">Ra chơi</option><option value="Ăn trưa">Ăn trưa</option><option value="Sinh hoạt lớp">Sinh hoạt lớp</option><option value="Ra về">Ra về</option><option value="Tự do">Hoạt động tự do</option></select></label><button id="addEventBtn" class="small-btn">＋ Thêm mốc</button></div>
+      </section>
+    </section>
+
+    <aside class="side-column">
+      <section class="panel selected-panel">
+        <div class="panel-heading"><div><span class="eyebrow">TÙY CHỈNH NHÂN VẬT</span><h2>Điều khiển hành vi</h2></div><span class="gear">⚙️</span></div>
+        <label class="field-label">Chọn nhân vật<select id="actorSelect"></select></label>
+        <div id="actorSummary" class="actor-summary"></div>
+        <label class="field-label">Tính cách<select id="personalitySelect"><option value="diligent">Chăm chỉ 📘</option><option value="curious">Tò mò 🔎</option><option value="active">Năng động ⚡</option><option value="playful">Hay đùa 😄</option><option value="quiet">Trầm tính 🌿</option><option value="sleepy">Hay buồn ngủ 🥱</option><option value="leader">Thủ lĩnh 🌟</option></select></label>
+        <label class="field-label">Hành vi mong muốn<select id="behaviorSelect"><option value="auto">Tự quyết định theo thời khóa biểu</option><option value="listen">Chú ý nghe giảng</option><option value="write">Ghi chép bài</option><option value="raise">Hay giơ tay phát biểu</option><option value="read">Tự đọc sách</option><option value="talk">Nói chuyện với bạn</option><option value="sleep">Ngủ gật</option><option value="play">Chơi với bạn</option><option value="wander">Đi dạo quanh sân</option><option value="follow">Đi theo cô giáo</option><option value="home">Ra về</option></select></label>
+        <label class="field-label">Độ tập trung <div class="range-line"><input id="focusRange" type="range" min="0" max="100" value="75"><strong id="focusValue">75%</strong></div></label>
+        <button id="applyActorBtn" class="primary-btn full-btn">Lưu tính cách & hành vi</button>
+        <button id="resetActorBtn" class="text-btn">Đặt nhân vật về tự động</button>
+      </section>
+
+      <section class="panel teacher-panel">
+        <div class="panel-heading"><div><span class="eyebrow">NGƯỜI DẪN DẮT</span><h2>Cô giáo</h2></div><span class="teacher-avatar">👩🏻‍🏫</span></div>
+        <label class="field-label">Phong cách dạy<select id="teacherStyle"><option value="balanced">Thân thiện, cân bằng</option><option value="strict">Nghiêm túc, kỷ luật</option><option value="fun">Vui vẻ, nhiều trò chơi</option><option value="gentle">Nhẹ nhàng, kiên nhẫn</option></select></label>
+        <label class="field-label">Hoạt động của cô<select id="teacherAction"><option value="auto">Tự động theo thời khóa biểu</option><option value="teach">Giảng bài trên bảng</option><option value="help">Đi giúp học sinh</option><option value="check">Kiểm tra bài</option><option value="walk">Đi quan sát lớp</option><option value="break">Nghỉ ở sân trường</option></select></label>
+        <button id="applyTeacherBtn" class="secondary-btn full-btn">Cập nhật cô giáo</button>
+        <p class="helper-note">Cô và mỗi học sinh tự đổi hoạt động dựa trên giờ học, tính cách và lựa chọn của bạn.</p>
+      </section>
+
+      <section class="panel log-panel"><div class="panel-heading"><div><span class="eyebrow">DIỄN BIẾN</span><h2>Nhật ký lớp</h2></div><button id="clearLogBtn" class="icon-btn" aria-label="Xóa nhật ký">⌫</button></div><div id="activityLog" class="activity-log"><div class="log-entry"><span class="log-time">07:30</span><span>🔔 Học sinh bắt đầu vào lớp.</span></div></div></section>
+      <p class="disclaimer">Bản mô phỏng hành vi bằng luật đơn giản; có thể chỉnh từng nhân vật và tự tạo thời khóa biểu.</p>
+    </aside>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
