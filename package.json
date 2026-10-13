@@ -1,0 +1,9 @@
+{
+  "name": "vnm-classroom-life-sim",
+  "version": "1.0.0",
+  "description": "Mo phong lop hoc va san truong 2D nhin tu tren cao",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "express": "^4.21.2" },
+  "engines": { "node": ">=18" }
+}
